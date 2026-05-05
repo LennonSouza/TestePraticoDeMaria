@@ -30,6 +30,8 @@ namespace App.Domain.Entities
             Status = StatusOrdemServico.Aberta;
         }
 
+        public void DefinirId(int id) => Id = id;
+
         public void CarregarItens(IEnumerable<OrdemServicoItem> itens)
         {
             _itens.Clear();
@@ -64,8 +66,11 @@ namespace App.Domain.Entities
 
         private void ValidarEdicaoItens()
         {
-            if (Status == StatusOrdemServico.Concluida || Status == StatusOrdemServico.Cancelada)
-                throw new InvalidOperationException("Não é permitido editar itens");
+            if (Status == StatusOrdemServico.Concluida)
+                throw new InvalidOperationException("Esta OS já está concluída.");
+            if (Status == StatusOrdemServico.Cancelada)
+                throw new InvalidOperationException("Não é possível concluir uma OS cancelada.");
+
         }
 
         public void Concluir()
@@ -97,6 +102,24 @@ namespace App.Domain.Entities
                 throw new InvalidOperationException("Apenas OS com status Aberta pode ser iniciada.");
 
             Status = StatusOrdemServico.EmAndamento;
+        }
+
+        // Construtor de reconstituição
+        private OrdemServico() { }
+
+        public static OrdemServico Reconstituir(int id, int clienteId, DateTime dataAbertura, DateTime? dataConclusao, StatusOrdemServico status, string observacao, decimal valorTotal, int versao)
+        {
+            return new OrdemServico
+            {
+                Id = id,
+                ClienteId = clienteId,
+                DataAbertura = dataAbertura,
+                DataConclusao = dataConclusao,
+                Status = status,
+                Observacao = observacao,
+                ValorTotal = valorTotal,
+                Versao = versao
+            };
         }
     }
 }

@@ -42,5 +42,24 @@ namespace App.Domain.Entities
             var subtotal = Quantidade * ValorUnitario;
             ValorTotalItem = subtotal + subtotal * (PercentualImpostoAplicado / 100m);
         }
+
+        // Construtor de reconstituição
+        private OrdemServicoItem() { }
+
+        public static OrdemServicoItem Reconstituir(int id, int ordemServicoId, int servicoId, int quantidade, decimal valorUnitario, decimal percentualImpostoAplicado, decimal valorTotalItem)
+        {
+            var item = new OrdemServicoItem
+            {
+                Id = id,
+                OrdemServicoId = ordemServicoId,
+                ServicoId = servicoId,
+                ValorUnitario = valorUnitario,
+                PercentualImpostoAplicado = percentualImpostoAplicado,
+                ValorTotalItem = valorTotalItem
+            };
+            // Passa pelo setter para validar quantidade mesmo na reconstituição
+            item.Quantidade = quantidade;
+            return item;
+        }
     }
 }

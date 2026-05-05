@@ -47,7 +47,29 @@ namespace App.Domain.Entities
             if (ativo.HasValue) Ativo = ativo.Value;
         }
 
+        public void DefinirId(int id) => Id = id;
+
         public void Desativar() => Ativo = false;
         public void Ativar() => Ativo = true;
+
+        // Construtor de reconstituição.
+        private Cliente() { }
+
+        public static Cliente Reconstituir(int id, string nome, string documento, TipoPessoa tipo, string email, string telefone, DateTime dataCadastro, bool ativo)
+        {
+            var cliente = new Cliente
+            {
+                Id = id,
+                Documento = documento,
+                Tipo = tipo,
+                Email = email,
+                Telefone = telefone,
+                DataCadastro = dataCadastro,
+                Ativo = ativo
+            };
+
+            cliente.Nome = nome;
+            return cliente;
+        }
     }
 }

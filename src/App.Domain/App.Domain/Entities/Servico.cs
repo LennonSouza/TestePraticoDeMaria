@@ -66,5 +66,21 @@ namespace App.Domain.Entities
 
         public void Desativar() => Ativo = false;
         public void Ativar() => Ativo = true;
+
+        // Construtor de reconstituição
+        private Servico() { }
+
+        public static Servico Reconstituir(int id, string nome, decimal valorBase, decimal percentualImposto, bool ativo)
+        {
+            var servico = new Servico
+            {
+                Id = id,
+                Ativo = ativo
+            };
+            servico.Nome = nome;
+            servico.ValorBase = valorBase;
+            servico.PercentualImposto = percentualImposto;
+            return servico;
+        }
     }
 }
