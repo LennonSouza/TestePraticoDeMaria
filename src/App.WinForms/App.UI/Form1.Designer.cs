@@ -1,4 +1,4 @@
-﻿namespace App.WinForms
+﻿namespace App.UI
 {
     partial class Form1
     {
