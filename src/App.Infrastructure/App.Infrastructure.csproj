@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="App.Domain">
-      <HintPath>..\App.Domain\App.Domain\bin\Debug\App.Domain.dll</HintPath>
+      <HintPath>..\App.Domain\bin\Debug\App.Domain.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
@@ -80,6 +80,8 @@
     <Compile Include="Data\ConnectionFactory.cs" />
     <Compile Include="Data\Repositories\AuditoriaRepository.cs" />
     <Compile Include="Data\Repositories\ClienteRepository.cs" />
+    <Compile Include="Data\Repositories\OrdemServicoComCliente.cs" />
+    <Compile Include="Data\Repositories\OrdemServicoItemComNome.cs" />
     <Compile Include="Data\Repositories\OrdemServicoRepository.cs" />
     <Compile Include="Data\Repositories\RelatorioRepository.cs" />
     <Compile Include="Data\Repositories\ServicoRepository.cs" />

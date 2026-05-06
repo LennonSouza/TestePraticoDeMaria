@@ -4,6 +4,7 @@ using App.Infrastructure.Exceptions;
 using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace App.Infrastructure.Data.Repositories
 {
@@ -121,7 +122,7 @@ namespace App.Infrastructure.Data.Repositories
             }
         }
 
-        public IEnumerable<OrdemServico> Listar(DateTime? dataInicio, DateTime? dataFim,
+        public IEnumerable<OrdemServicoComCliente> Listar(DateTime? dataInicio, DateTime? dataFim,
     int? clienteId, StatusOrdemServico? status, int pagina, int tamanhoPagina)
         {
             var sql = @"
@@ -148,15 +149,21 @@ namespace App.Infrastructure.Data.Repositories
                 cmd.Parameters.AddWithValue("@limite", tamanhoPagina);
                 cmd.Parameters.AddWithValue("@offset", (pagina - 1) * tamanhoPagina);
 
-                var lista = new List<OrdemServico>();
+                var lista = new List<OrdemServicoComCliente>();
                 using (var reader = cmd.ExecuteReader())
-                    while (reader.Read()) lista.Add(MapearOs(reader));
-
+                {
+                    while (reader.Read())
+                        lista.Add(new OrdemServicoComCliente
+                        {
+                            Os = MapearOs(reader),
+                            ClienteNome = reader.GetString(2)
+                        });
+                }
                 return lista;
             }
         }
 
-        public OrdemServico ObterPorId(int id)
+        public OrdemServicoComCliente ObterPorId(int id)
         {
             const string sql = @"
         SELECT os.id, os.cliente_id, c.nome, os.data_abertura, os.data_conclusao,
@@ -173,22 +180,28 @@ namespace App.Infrastructure.Data.Repositories
                 {
                     if (!reader.Read()) return null;
 
-                    var os = MapearOs(reader);
+                    var resultado = new OrdemServicoComCliente
+                    {
+                        Os = MapearOs(reader),
+                        ClienteNome = reader.GetString(2)
+                    };
                     reader.Close();
 
-                    os.CarregarItens(ObterItens(id));
-                    return os;
+                    resultado.Os.CarregarItens(
+                        ObterItensComNome(id).Select(x => x.Item)
+                    );
+
+                    return resultado;
                 }
             }
         }
 
-        private IEnumerable<OrdemServicoItem> ObterItens(int ordemServicoId)
+        public IEnumerable<OrdemServicoItemComNome> ObterItensComNome(int ordemServicoId)
         {
             const string sql = @"
-        SELECT 
-            i.id, i.ordem_servico_id, i.servico_id, i.quantidade,
-            i.valor_unitario, i.percentual_imposto_aplicado, i.valor_total_item,
-            s.nome AS servico_nome
+        SELECT i.id, i.ordem_servico_id, i.servico_id, i.quantidade,
+               i.valor_unitario, i.percentual_imposto_aplicado, i.valor_total_item,
+               s.nome
         FROM ordens_servico_itens i
         INNER JOIN servicos s ON s.id = i.servico_id
         WHERE i.ordem_servico_id = @osId";
@@ -197,20 +210,23 @@ namespace App.Infrastructure.Data.Repositories
             {
                 cmd.Parameters.AddWithValue("@osId", ordemServicoId);
 
-                var itens = new List<OrdemServicoItem>();
+                var itens = new List<OrdemServicoItemComNome>();
                 using (var reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
-                        itens.Add(OrdemServicoItem.Reconstituir(
-                            id: reader.GetInt32(0),
-                            ordemServicoId: reader.GetInt32(1),
-                            servicoId: reader.GetInt32(2),
-                            quantidade: reader.GetInt32(3),
-                            valorUnitario: reader.GetDecimal(4),
-                            percentualImpostoAplicado: reader.GetDecimal(5),
-                            valorTotalItem: reader.GetDecimal(6),
-                            servicoNome: reader.GetString(7)
-                        ));
+                        itens.Add(new OrdemServicoItemComNome
+                        {
+                            Item = OrdemServicoItem.Reconstituir(
+                                id: reader.GetInt32(0),
+                                ordemServicoId: reader.GetInt32(1),
+                                servicoId: reader.GetInt32(2),
+                                quantidade: reader.GetInt32(3),
+                                valorUnitario: reader.GetDecimal(4),
+                                percentualImpostoAplicado: reader.GetDecimal(5),
+                                valorTotalItem: reader.GetDecimal(6)
+                            ),
+                            ServicoNome = reader.GetString(7)
+                        });
                 }
                 return itens;
             }
@@ -221,7 +237,6 @@ namespace App.Infrastructure.Data.Repositories
             return OrdemServico.Reconstituir(
                 id: r.GetInt32(0),
                 clienteId: r.GetInt32(1),
-                clienteNome: r.GetString(2),      // novo campo
                 dataAbertura: r.GetDateTime(3),
                 dataConclusao: r.IsDBNull(4) ? (DateTime?)null : r.GetDateTime(4),
                 status: (StatusOrdemServico)r.GetInt16(5),

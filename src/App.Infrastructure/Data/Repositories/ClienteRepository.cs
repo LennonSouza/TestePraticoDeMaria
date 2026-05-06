@@ -69,6 +69,17 @@ namespace App.Infrastructure.Data.Repositories
             }
         }
 
+        public void Excluir(int id)
+        {
+            const string sql = "DELETE FROM clientes WHERE id = @id";
+
+            using (var cmd = new NpgsqlCommand(sql, _uow.Connection, _uow.Transaction))
+            {
+                cmd.Parameters.AddWithValue("@id", id);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
         public IEnumerable<Cliente> Listar(string nome, string documento, bool? ativo, int pagina, int tamanhoPagina)
         {
             var sql = @"
