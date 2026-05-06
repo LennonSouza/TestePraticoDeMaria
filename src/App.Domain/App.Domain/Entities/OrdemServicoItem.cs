@@ -10,6 +10,8 @@ namespace App.Domain.Entities
         public int OrdemServicoId { get; private set; }
         public int ServicoId { get; private set; }
 
+        public string ServicoNome { get; private set; }
+
         public int Quantidade
         {
             get => _quantidade;
@@ -46,7 +48,9 @@ namespace App.Domain.Entities
         // Construtor de reconstituição
         private OrdemServicoItem() { }
 
-        public static OrdemServicoItem Reconstituir(int id, int ordemServicoId, int servicoId, int quantidade, decimal valorUnitario, decimal percentualImpostoAplicado, decimal valorTotalItem)
+        public static OrdemServicoItem Reconstituir(int id, int ordemServicoId, int servicoId,
+            int quantidade, decimal valorUnitario, decimal percentualImpostoAplicado,
+            decimal valorTotalItem, string servicoNome = null)
         {
             var item = new OrdemServicoItem
             {
@@ -55,9 +59,9 @@ namespace App.Domain.Entities
                 ServicoId = servicoId,
                 ValorUnitario = valorUnitario,
                 PercentualImpostoAplicado = percentualImpostoAplicado,
-                ValorTotalItem = valorTotalItem
+                ValorTotalItem = valorTotalItem,
+                ServicoNome = servicoNome
             };
-            // Passa pelo setter para validar quantidade mesmo na reconstituição
             item.Quantidade = quantidade;
             return item;
         }

@@ -9,6 +9,7 @@ namespace App.Domain.Entities
     {
         public int Id { get; private set; }
         public int ClienteId { get; private set; }
+        public string ClienteNome { get; private set; }
 
         public DateTime DataAbertura { get; private set; }
         public DateTime? DataConclusao { get; private set; }
@@ -107,12 +108,13 @@ namespace App.Domain.Entities
         // Construtor de reconstituição
         private OrdemServico() { }
 
-        public static OrdemServico Reconstituir(int id, int clienteId, DateTime dataAbertura, DateTime? dataConclusao, StatusOrdemServico status, string observacao, decimal valorTotal, int versao)
+        public static OrdemServico Reconstituir(int id, int clienteId, string clienteNome, DateTime dataAbertura, DateTime? dataConclusao, StatusOrdemServico status, string observacao, decimal valorTotal, int versao)
         {
             return new OrdemServico
             {
                 Id = id,
                 ClienteId = clienteId,
+                ClienteNome = clienteNome,
                 DataAbertura = dataAbertura,
                 DataConclusao = dataConclusao,
                 Status = status,
