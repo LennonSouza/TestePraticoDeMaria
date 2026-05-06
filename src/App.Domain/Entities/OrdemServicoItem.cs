@@ -10,8 +10,6 @@ namespace App.Domain.Entities
         public int OrdemServicoId { get; private set; }
         public int ServicoId { get; private set; }
 
-        public string ServicoNome { get; private set; }
-
         public int Quantidade
         {
             get => _quantidade;
@@ -50,7 +48,7 @@ namespace App.Domain.Entities
 
         public static OrdemServicoItem Reconstituir(int id, int ordemServicoId, int servicoId,
             int quantidade, decimal valorUnitario, decimal percentualImpostoAplicado,
-            decimal valorTotalItem, string servicoNome = null)
+            decimal valorTotalItem)
         {
             var item = new OrdemServicoItem
             {
@@ -59,8 +57,7 @@ namespace App.Domain.Entities
                 ServicoId = servicoId,
                 ValorUnitario = valorUnitario,
                 PercentualImpostoAplicado = percentualImpostoAplicado,
-                ValorTotalItem = valorTotalItem,
-                ServicoNome = servicoNome
+                ValorTotalItem = valorTotalItem
             };
             item.Quantidade = quantidade;
             return item;
