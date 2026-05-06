@@ -32,6 +32,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="App.Domain">
+      <HintPath>..\App.Domain\bin\Debug\App.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="App.Infrastructure">
+      <HintPath>..\App.Infrastructure\bin\Debug\App.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,11 +51,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\AtualizarClienteCommand.cs" />
+    <Compile Include="Commands\AtualizarServicoCommand.cs" />
+    <Compile Include="Commands\CadastrarClienteCommand.cs" />
+    <Compile Include="Commands\CadastrarServicoCommand.cs" />
+    <Compile Include="Commands\MudarStatusOsCommand.cs" />
+    <Compile Include="Commands\SalvarItensOsCommand.cs" />
+    <Compile Include="DTOs\ClienteDto.cs" />
+    <Compile Include="DTOs\OrdemServicoDto.cs" />
+    <Compile Include="DTOs\OrdemServicoItemDto.cs" />
+    <Compile Include="DTOs\RelatorioDto.cs" />
+    <Compile Include="DTOs\RelatorioGrupoDto.cs" />
+    <Compile Include="DTOs\RelatorioItemDto.cs" />
+    <Compile Include="DTOs\ServicoDto.cs" />
+    <Compile Include="Exceptions\ConcorrenciaException.cs" />
+    <Compile Include="Exceptions\DocumentoDuplicadoException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceFactory.cs" />
+    <Compile Include="Services\ClienteService.cs" />
+    <Compile Include="Services\OrdemServicoService.cs" />
+    <Compile Include="Services\RelatorioService.cs" />
+    <Compile Include="Services\ServicoService.cs" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="DTOs\" />
-    <Folder Include="Services\" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
