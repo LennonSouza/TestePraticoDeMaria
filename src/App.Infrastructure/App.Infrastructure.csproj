@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="App.Domain">
+      <HintPath>..\App.Domain\App.Domain\bin\Debug\App.Domain.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Bcl.AsyncInterfaces.1.1.0\lib\net461\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -74,7 +77,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Database\ConnectionFactory.cs" />
+    <Compile Include="Data\ConnectionFactory.cs" />
+    <Compile Include="Data\Repositories\AuditoriaRepository.cs" />
+    <Compile Include="Data\Repositories\ClienteRepository.cs" />
+    <Compile Include="Data\Repositories\OrdemServicoRepository.cs" />
+    <Compile Include="Data\Repositories\RelatorioRepository.cs" />
+    <Compile Include="Data\Repositories\ServicoRepository.cs" />
+    <Compile Include="Data\UnitOfWork.cs" />
+    <Compile Include="Exceptions\ConcorrenciaException.cs" />
+    <Compile Include="Exceptions\DocumentoDuplicadoException.cs" />
     <Compile Include="Logging\FileLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -82,8 +93,6 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
