@@ -10,5 +10,7 @@
     <Project Path="src/App.Infrastructure/App.Infrastructure.csproj" Id="cc786601-27b9-441d-8890-c0fc1d918138" />
     <Project Path="src/App.UI/App.UI.csproj" Id="18d4f0d5-672b-4a6b-a824-7d4bf6990d87" />
   </Folder>
-  <Folder Name="/tests/" />
+  <Folder Name="/tests/">
+    <Project Path="tests/App.Domain.Tests/App.Domain.Tests.csproj" Id="767b8130-fe95-4384-8cba-d23f1c03fe8e" />
+  </Folder>
 </Solution>
