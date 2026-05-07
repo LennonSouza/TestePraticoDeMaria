@@ -4,7 +4,6 @@
   </Folder>
   <Folder Name="/scripts/">
     <File Path="database.sql" />
-    <File Path="trigger_auditoria.sql" />
   </Folder>
   <Folder Name="/src/">
     <File Path="../../../../Downloads/README.md" />
