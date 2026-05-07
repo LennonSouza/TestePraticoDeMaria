@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2005/01/reportdefinition"
+        xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
+	<DataSources>
+		<DataSource Name="RelatorioDataSet">
+			<ConnectionProperties>
+				<DataProvider>System.Data.DataSet</DataProvider>
+				<ConnectString>/* Local Connection */</ConnectString>
+			</ConnectionProperties>
+			<rd:DataSourceID>00000000-0000-0000-0000-000000000000</rd:DataSourceID>
+		</DataSource>
+	</DataSources>
+	<DataSets>
+		<DataSet Name="Cabecalho">
+			<Query>
+				<DataSourceName>RelatorioDataSet</DataSourceName>
+				<CommandText>/* Local Query */</CommandText>
+			</Query>
+			<Fields>
+				<Field Name="DataInicio">
+					<DataField>DataInicio</DataField>
+					<rd:TypeName>System.String</rd:TypeName>
+				</Field>
+				<Field Name="DataFim">
+					<DataField>DataFim</DataField>
+					<rd:TypeName>System.String</rd:TypeName>
+				</Field>
+				<Field Name="TotalGeral">
+					<DataField>TotalGeral</DataField>
+					<rd:TypeName>System.Decimal</rd:TypeName>
+				</Field>
+				<Field Name="TotalImpostos">
+					<DataField>TotalImpostos</DataField>
+					<rd:TypeName>System.Decimal</rd:TypeName>
+				</Field>
+				<Field Name="QuantidadeTotalOs">
+					<DataField>QuantidadeTotalOs</DataField>
+					<rd:TypeName>System.Int32</rd:TypeName>
+				</Field>
+				<Field Name="DataGeracao">
+					<DataField>DataGeracao</DataField>
+					<rd:TypeName>System.String</rd:TypeName>
+				</Field>
+			</Fields>
+		</DataSet>
+		<DataSet Name="Grupos">
+			<Query>
+				<DataSourceName>RelatorioDataSet</DataSourceName>
+				<CommandText>/* Local Query */</CommandText>
+			</Query>
+			<Fields>
+				<Field Name="ClienteId">
+					<DataField>ClienteId</DataField>
+					<rd:TypeName>System.Int32</rd:TypeName>
+				</Field>
+				<Field Name="ClienteNome">
+					<DataField>ClienteNome</DataField>
+					<rd:TypeName>System.String</rd:TypeName>
+				</Field>
+				<Field Name="TotalCliente">
+					<DataField>TotalCliente</DataField>
+					<rd:TypeName>System.Decimal</rd:TypeName>
+				</Field>
+				<Field Name="TotalImpostos">
+					<DataField>TotalImpostos</DataField>
+					<rd:TypeName>System.Decimal</rd:TypeName>
+				</Field>
+				<Field Name="QuantidadeOs">
+					<DataField>QuantidadeOs</DataField>
+					<rd:TypeName>System.Int32</rd:TypeName>
+				</Field>
+			</Fields>
+		</DataSet>
+		<DataSet Name="Itens">
+			<Query>
+				<DataSourceName>RelatorioDataSet</DataSourceName>
+				<CommandText>/* Local Query */</CommandText>
+			</Query>
+			<Fields>
+				<Field Name="ClienteId">
+					<DataField>ClienteId</DataField>
+					<rd:TypeName>System.Int32</rd:TypeName>
+				</Field>
+				<Field Name="ClienteNome">
+					<DataField>ClienteNome</DataField>
+					<rd:TypeName>System.String</rd:TypeName>
+				</Field>
+				<Field Name="OsId">
+					<DataField>OsId</DataField>
+					<rd:TypeName>System.String</rd:TypeName>
+				</Field>
+				<Field Name="DataAbertura">
+					<DataField>DataAbertura</DataField>
+					<rd:TypeName>System.String</rd:TypeName>
+				</Field>
+				<Field Name="DataConclusao">
+					<DataField>DataConclusao</DataField>
+					<rd:TypeName>System.String</rd:TypeName>
+				</Field>
+				<Field Name="Status">
+					<DataField>Status</DataField>
+					<rd:TypeName>System.String</rd:TypeName>
+				</Field>
+				<Field Name="ValorTotal">
+					<DataField>ValorTotal</DataField>
+					<rd:TypeName>System.Decimal</rd:TypeName>
+				</Field>
+				<Field Name="TotalImpostos">
+					<DataField>TotalImpostos</DataField>
+					<rd:TypeName>System.Decimal</rd:TypeName>
+				</Field>
+			</Fields>
+		</DataSet>
+	</DataSets>
+	<Body>
+		<Height>12in</Height>
+		<ReportItems>
+
+			<Textbox Name="txtTitulo">
+				<Top>0in</Top>
+				<Left>0in</Left>
+				<Width>7in</Width>
+				<Height>0.3in</Height>
+				<Value>Relatório de Ordens de Serviço</Value>
+				<Style>
+					<FontSize>14pt</FontSize>
+					<FontWeight>Bold</FontWeight>
+				</Style>
+			</Textbox>
+
+			<Textbox Name="txtPeriodo">
+				<Top>0.32in</Top>
+				<Left>0in</Left>
+				<Width>4in</Width>
+				<Height>0.2in</Height>
+				<Value>=First(Fields!DataInicio.Value, "Cabecalho") &amp; " a " &amp; First(Fields!DataFim.Value, "Cabecalho")</Value>
+				<Style>
+					<FontSize>9pt</FontSize>
+					<Color>Gray</Color>
+				</Style>
+			</Textbox>
+
+			<Textbox Name="txtGeracao">
+				<Top>0.32in</Top>
+				<Left>4in</Left>
+				<Width>3in</Width>
+				<Height>0.2in</Height>
+				<Value>=First(Fields!DataGeracao.Value, "Cabecalho")</Value>
+				<Style>
+					<FontSize>8pt</FontSize>
+					<Color>Gray</Color>
+					<TextAlign>Right</TextAlign>
+				</Style>
+			</Textbox>
+
+			<Textbox Name="txtResumo">
+				<Top>0.56in</Top>
+				<Left>0in</Left>
+				<Width>7in</Width>
+				<Height>0.2in</Height>
+				<Value>="Total de OS: " &amp; First(Fields!QuantidadeTotalOs.Value, "Cabecalho") &amp; "   |   Total geral: " &amp; FormatCurrency(First(Fields!TotalGeral.Value, "Cabecalho")) &amp; "   |   Impostos: " &amp; FormatCurrency(First(Fields!TotalImpostos.Value, "Cabecalho"))</Value>
+				<Style>
+					<FontSize>9pt</FontSize>
+					<FontWeight>Bold</FontWeight>
+				</Style>
+			</Textbox>
+
+			<Table Name="tblRelatorio">
+				<Top>0.85in</Top>
+				<Left>0in</Left>
+				<Width>7in</Width>
+				<DataSetName>Itens</DataSetName>
+				<TableColumns>
+					<TableColumn>
+						<Width>0.5in</Width>
+					</TableColumn>
+					<TableColumn>
+						<Width>1.5in</Width>
+					</TableColumn>
+					<TableColumn>
+						<Width>1.5in</Width>
+					</TableColumn>
+					<TableColumn>
+						<Width>1.2in</Width>
+					</TableColumn>
+					<TableColumn>
+						<Width>1.3in</Width>
+					</TableColumn>
+					<TableColumn>
+						<Width>1in</Width>
+					</TableColumn>
+				</TableColumns>
+				<Header>
+					<TableRows>
+						<TableRow>
+							<Height>0.22in</Height>
+							<TableCells>
+								<TableCell>
+									<ReportItems>
+										<Textbox Name="hOS">
+											<Value>OS #</Value>
+											<Style>
+												<FontWeight>Bold</FontWeight>
+												<BackgroundColor>LightGray</BackgroundColor>
+												<FontSize>8pt</FontSize>
+											</Style>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+								<TableCell>
+									<ReportItems>
+										<Textbox Name="hAb">
+											<Value>Abertura</Value>
+											<Style>
+												<FontWeight>Bold</FontWeight>
+												<BackgroundColor>LightGray</BackgroundColor>
+												<FontSize>8pt</FontSize>
+											</Style>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+								<TableCell>
+									<ReportItems>
+										<Textbox Name="hCo">
+											<Value>Conclusão</Value>
+											<Style>
+												<FontWeight>Bold</FontWeight>
+												<BackgroundColor>LightGray</BackgroundColor>
+												<FontSize>8pt</FontSize>
+											</Style>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+								<TableCell>
+									<ReportItems>
+										<Textbox Name="hSt">
+											<Value>Status</Value>
+											<Style>
+												<FontWeight>Bold</FontWeight>
+												<BackgroundColor>LightGray</BackgroundColor>
+												<FontSize>8pt</FontSize>
+											</Style>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+								<TableCell>
+									<ReportItems>
+										<Textbox Name="hVl">
+											<Value>Valor total</Value>
+											<Style>
+												<FontWeight>Bold</FontWeight>
+												<BackgroundColor>LightGray</BackgroundColor>
+												<FontSize>8pt</FontSize>
+												<TextAlign>Right</TextAlign>
+											</Style>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+								<TableCell>
+									<ReportItems>
+										<Textbox Name="hIm">
+											<Value>Impostos</Value>
+											<Style>
+												<FontWeight>Bold</FontWeight>
+												<BackgroundColor>LightGray</BackgroundColor>
+												<FontSize>8pt</FontSize>
+												<TextAlign>Right</TextAlign>
+											</Style>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+							</TableCells>
+						</TableRow>
+					</TableRows>
+					<RepeatOnNewPage>true</RepeatOnNewPage>
+				</Header>
+				<TableGroups>
+					<TableGroup>
+						<Grouping Name="GrupoCliente">
+							<GroupExpressions>
+								<GroupExpression>=Fields!ClienteId.Value</GroupExpression>
+							</GroupExpressions>
+						</Grouping>
+						<Header>
+							<TableRows>
+								<TableRow>
+									<Height>0.24in</Height>
+									<TableCells>
+										<TableCell>
+											<ColSpan>4</ColSpan>
+											<ReportItems>
+												<Textbox Name="txtClienteNome">
+													<Value>=Fields!ClienteNome.Value</Value>
+													<Style>
+														<FontWeight>Bold</FontWeight>
+														<FontSize>9pt</FontSize>
+														<BackgroundColor>#E8E8E8</BackgroundColor>
+													</Style>
+												</Textbox>
+											</ReportItems>
+										</TableCell>
+										<TableCell>
+											<ColSpan>2</ColSpan>
+											<ReportItems>
+												<Textbox Name="txtClienteTotal">
+													<Value>=FormatCurrency(Sum(Fields!ValorTotal.Value))</Value>
+													<Style>
+														<FontWeight>Bold</FontWeight>
+														<FontSize>9pt</FontSize>
+														<BackgroundColor>#E8E8E8</BackgroundColor>
+														<TextAlign>Right</TextAlign>
+													</Style>
+												</Textbox>
+											</ReportItems>
+										</TableCell>
+									</TableCells>
+								</TableRow>
+							</TableRows>
+						</Header>
+						<Footer>
+							<TableRows>
+								<TableRow>
+									<Height>0.2in</Height>
+									<TableCells>
+										<TableCell>
+											<ColSpan>4</ColSpan>
+											<ReportItems>
+												<Textbox Name="txtSubLabel">
+													<Value>=Count(Fields!OsId.Value) &amp; " OS(s) — subtotal"</Value>
+													<Style>
+														<FontSize>8pt</FontSize>
+														<Color>Gray</Color>
+														<FontStyle>Italic</FontStyle>
+													</Style>
+												</Textbox>
+											</ReportItems>
+										</TableCell>
+										<TableCell>
+											<ReportItems>
+												<Textbox Name="txtSubValor">
+													<Value>=FormatCurrency(Sum(Fields!ValorTotal.Value))</Value>
+													<Style>
+														<FontSize>8pt</FontSize>
+														<TextAlign>Right</TextAlign>
+														<FontWeight>Bold</FontWeight>
+													</Style>
+												</Textbox>
+											</ReportItems>
+										</TableCell>
+										<TableCell>
+											<ReportItems>
+												<Textbox Name="txtSubImposto">
+													<Value>=FormatCurrency(Sum(Fields!TotalImpostos.Value))</Value>
+													<Style>
+														<FontSize>8pt</FontSize>
+														<TextAlign>Right</TextAlign>
+													</Style>
+												</Textbox>
+											</ReportItems>
+										</TableCell>
+									</TableCells>
+								</TableRow>
+							</TableRows>
+						</Footer>
+					</TableGroup>
+				</TableGroups>
+				<Details>
+					<TableRows>
+						<TableRow>
+							<Height>0.2in</Height>
+							<TableCells>
+								<TableCell>
+									<ReportItems>
+										<Textbox Name="dId">
+											<Value>=Fields!OsId.Value</Value>
+											<Style>
+												<FontSize>8pt</FontSize>
+											</Style>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+								<TableCell>
+									<ReportItems>
+										<Textbox Name="dAb">
+											<Value>=Fields!DataAbertura.Value</Value>
+											<Style>
+												<FontSize>8pt</FontSize>
+											</Style>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+								<TableCell>
+									<ReportItems>
+										<Textbox Name="dCo">
+											<Value>=Fields!DataConclusao.Value</Value>
+											<Style>
+												<FontSize>8pt</FontSize>
+											</Style>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+								<TableCell>
+									<ReportItems>
+										<Textbox Name="dSt">
+											<Value>=Fields!Status.Value</Value>
+											<Style>
+												<FontSize>8pt</FontSize>
+											</Style>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+								<TableCell>
+									<ReportItems>
+										<Textbox Name="dVl">
+											<Value>=FormatCurrency(Fields!ValorTotal.Value)</Value>
+											<Style>
+												<FontSize>8pt</FontSize>
+												<TextAlign>Right</TextAlign>
+											</Style>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+								<TableCell>
+									<ReportItems>
+										<Textbox Name="dIm">
+											<Value>=FormatCurrency(Fields!TotalImpostos.Value)</Value>
+											<Style>
+												<FontSize>8pt</FontSize>
+												<TextAlign>Right</TextAlign>
+											</Style>
+										</Textbox>
+									</ReportItems>
+								</TableCell>
+							</TableCells>
+						</TableRow>
+					</TableRows>
+				</Details>
+			</Table>
+
+		</ReportItems>
+	</Body>
+	<Width>7in</Width>
+	<PageHeader>
+		<Height>0in</Height>
+		<PrintOnFirstPage>true</PrintOnFirstPage>
+		<PrintOnLastPage>true</PrintOnLastPage>
+	</PageHeader>
+	<PageFooter>
+		<Height>0in</Height>
+		<PrintOnFirstPage>true</PrintOnFirstPage>
+		<PrintOnLastPage>true</PrintOnLastPage>
+	</PageFooter>
+	<PageHeight>11in</PageHeight>
+	<PageWidth>8.5in</PageWidth>
+	<TopMargin>0.5in</TopMargin>
+	<BottomMargin>0.5in</BottomMargin>
+	<LeftMargin>0.75in</LeftMargin>
+	<RightMargin>0.75in</RightMargin>
+</Report>

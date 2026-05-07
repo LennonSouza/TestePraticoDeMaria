@@ -1,9 +1,14 @@
 <Solution>
+  <Folder Name="/scripts/">
+    <File Path="database.sql" />
+    <File Path="trigger_auditoria.sql" />
+  </Folder>
   <Folder Name="/src/">
+    <File Path="../../../../Downloads/README.md" />
     <Project Path="src/App.Application/App.Application.csproj" Id="4fe6e9c5-9020-41ab-b521-c124b49b3881" />
-    <Project Path="src/App.Domain/App.Domain/App.Domain.csproj" Id="1e11720d-4b6c-472d-bba3-2a3e4bb86a7c" />
+    <Project Path="src/App.Domain/App.Domain.csproj" Id="1e11720d-4b6c-472d-bba3-2a3e4bb86a7c" />
     <Project Path="src/App.Infrastructure/App.Infrastructure.csproj" Id="cc786601-27b9-441d-8890-c0fc1d918138" />
-    <Project Path="src/App.WinForms/App.WinForms.csproj" Id="83b0e458-ee7d-4924-ba4c-f519e3a11660" />
+    <Project Path="src/App.UI/App.UI.csproj" Id="18d4f0d5-672b-4a6b-a824-7d4bf6990d87" />
   </Folder>
   <Folder Name="/tests/" />
 </Solution>
