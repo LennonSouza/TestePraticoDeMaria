@@ -36,6 +36,7 @@ namespace App.Domain.Entities
         {
             _itens.Clear();
             _itens.AddRange(itens);
+            RecalcularTotal();
         }
 
         public void DefinirVersao(int versao) => Versao = versao;
