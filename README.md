@@ -41,11 +41,10 @@ O projeto segue uma arquitetura em camadas com separação rígida de responsabi
 - O repositório lança `ConcorrenciaException` que sobe pela cadeia até a UI
 - A UI recarrega a OS e exibe mensagem amigável ao usuário
 
-### Auditoria
+### Auditoria dupla
 
-- Toda alteração de status, itens e valor total gera um registro em `auditorias`
-- O snapshot JSON é gerado com `Newtonsoft.Json` sobre a entidade após a alteração
-- A auditoria ocorre dentro da mesma transação — ou tudo persiste ou nada persiste
+- Em código: toda alteração de status, itens e valor total gera um registro em `auditorias` via `AuditoriaRepository`, com snapshot JSON via `Newtonsoft.Json` e usuário da aplicação. A auditoria ocorre dentro da mesma transação — ou tudo persiste ou nada persiste.
+- No banco: trigger `fn_auditoria` aplicado nas tabelas `clientes`, `servicos`, `ordens_servico` e `ordens_servico_itens` — captura INSERT, UPDATE e DELETE via `row_to_json`, incluindo operações feitas diretamente via pgAdmin ou psql.
 
 ### Performance
 
@@ -77,6 +76,8 @@ O projeto segue uma arquitetura em camadas com separação rígida de responsabi
 | Newtonsoft.Json | 13.0.4 |
 | Microsoft.ReportViewer.WinForms | 10.0.40219.1 |
 | Microsoft.ReportViewer.Common | 10.0.40219.1 |
+| xunit | 2.4.2 |
+| xunit.runner.visualstudio | 2.4.5 |
 
 ---
 
@@ -88,7 +89,7 @@ Execute no psql ou pgAdmin:
 
     CREATE DATABASE gestao_os WITH ENCODING 'UTF8';
 
-### 2. Execute o script SQL
+### 2. Execute o script SQL principal
 
 Via terminal:
 
@@ -96,7 +97,18 @@ Via terminal:
 
 Ou abra o `database.sql` no pgAdmin, conecte no banco `gestao_os` e execute com F5.
 
-### 3. Configure a string de conexão
+### 3. Execute o trigger de auditoria
+
+Via terminal:
+
+    psql -U postgres -d gestao_os -f trigger_auditoria.sql
+
+Ou abra o `trigger_auditoria.sql` no pgAdmin e execute com F5.
+
+Este script cria a função `fn_auditoria` e os triggers nas tabelas principais.
+Deve ser executado após o `database.sql`.
+
+### 4. Configure a string de conexão
 
 Edite o `App.config` no projeto `App.UI`:
 
@@ -110,9 +122,48 @@ Edite o `App.config` no projeto `App.UI`:
       <add key="UsuarioAtual" value="sistema" />
     </appSettings>
 
-### 4. Compile e execute
+### 5. Compile e execute
 
 Defina `App.UI` como projeto de inicialização e pressione F5.
+
+---
+
+## Testes
+
+O projeto inclui testes unitários das entidades de domínio em `tests/App.Domain.Tests`.
+
+### Tecnologia
+
+- xUnit 2.4.2
+- xunit.runner.visualstudio 2.4.5
+
+### Como rodar
+
+No Visual Studio abra o Test Explorer (Test -> Test Explorer) e clique em Run All.
+
+Ou via terminal:
+
+    dotnet test tests/App.Domain.Tests/App.Domain.Tests.csproj
+
+### Cobertura
+
+| Classe | Casos de teste |
+|--------|---------------|
+| `Cliente` | 9 |
+| `Servico` | 10 |
+| `OrdemServicoItem` | 8 |
+| `OrdemServico` | 19 |
+| **Total** | **38** |
+
+Os testes cobrem todas as regras de negócio das entidades de domínio — validações de
+campos obrigatórios, cálculo de impostos com e sem incidência, transições de status
+válidas e inválidas, bloqueio de edição em OS concluídas ou canceladas, recálculo de
+valor total ao adicionar e remover itens, e reconstituição correta das entidades a partir
+dos dados do banco.
+
+Os testes de `OrdemServicoItem` incluem `[Theory]` com `[InlineData]` cobrindo 6
+combinações de quantidade, valor unitário e percentual de imposto para validar o cálculo
+do total em diferentes cenários.
 
 ---
 
@@ -154,7 +205,12 @@ Defina `App.UI` como projeto de inicialização e pressione F5.
           Relatorio/      — FormRelatorio, RelatorioReport.rdlc
         Program.cs
 
-    database.sql          — Script completo de criação do banco
+    tests/
+      App.Domain.Tests/
+        Entities/         — ClienteTests, ServicoTests,
+                            OrdemServicoTests, OrdemServicoItemTests
+
+    database.sql          — Script de criação do banco (tabelas, índices, constraints) e Trigger de auditoria automática no banco
     README.md
 
 ---
@@ -179,7 +235,9 @@ Defina `App.UI` como projeto de inicialização e pressione F5.
 
 ## Logs
 
-Os logs são gravados em `logs\app.log` relativo ao diretório do executável. O caminho pode ser alterado no `App.config` via chave `LogPath`.
+Os logs são gravados em `logs\app.log` relativo ao diretório do executável. O caminho
+pode ser alterado no `App.config` via chave `LogPath`. O diretório é criado
+automaticamente se não existir.
 
 Formato de exemplo:
 
