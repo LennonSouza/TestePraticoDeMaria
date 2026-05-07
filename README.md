@@ -96,19 +96,9 @@ Via terminal:
     psql -U postgres -d gestao_os -f database.sql
 
 Ou abra o `database.sql` no pgAdmin, conecte no banco `gestao_os` e execute com F5.
+Este script tambem cria a função `fn_auditoria` e os triggers nas tabelas principais.
 
-### 3. Execute o trigger de auditoria
-
-Via terminal:
-
-    psql -U postgres -d gestao_os -f trigger_auditoria.sql
-
-Ou abra o `trigger_auditoria.sql` no pgAdmin e execute com F5.
-
-Este script cria a função `fn_auditoria` e os triggers nas tabelas principais.
-Deve ser executado após o `database.sql`.
-
-### 4. Configure a string de conexão
+### 3. Configure a string de conexão
 
 Edite o `App.config` no projeto `App.UI`:
 
@@ -122,7 +112,7 @@ Edite o `App.config` no projeto `App.UI`:
       <add key="UsuarioAtual" value="sistema" />
     </appSettings>
 
-### 5. Compile e execute
+### 4. Compile e execute
 
 Defina `App.UI` como projeto de inicialização e pressione F5.
 
