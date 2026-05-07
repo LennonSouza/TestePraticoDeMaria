@@ -3,7 +3,7 @@
     <File Path="README.md" />
   </Folder>
   <Folder Name="/scripts/">
-    <File Path="database.sql" />
+    <File Path="scripts/database.sql" />
   </Folder>
   <Folder Name="/src/">
     <File Path="../../../../Downloads/README.md" />

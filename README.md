@@ -139,11 +139,11 @@ Ou via terminal:
 
 | Classe | Casos de teste |
 |--------|---------------|
-| `Cliente` | 9 |
-| `Servico` | 10 |
-| `OrdemServicoItem` | 8 |
-| `OrdemServico` | 19 |
-| **Total** | **38** |
+| `Cliente` | 11 |
+| `Servico` | 14 |
+| `OrdemServicoItem` | 13 |
+| `OrdemServico` | 24 |
+| **Total** | **62** |
 
 Os testes cobrem todas as regras de negócio das entidades de domínio — validações de
 campos obrigatórios, cálculo de impostos com e sem incidência, transições de status
